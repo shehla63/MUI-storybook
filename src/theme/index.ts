@@ -1,29 +1,62 @@
-"use client";
 import { createTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
 import { useMemo } from "react";
 import { palette } from "./palette";
 import themeJson from "./theme.json";
 
+type Breakpoints = Record<string, string | number>;
+type Spacing = Record<string, string | number>;
+
+// Utility to map breakpoints
+const mapBreakpoints = (breakpoints: Breakpoints): Record<string, number> => {
+  return Object.fromEntries(
+    Object.entries(breakpoints).map(([key, value]) => [key, Number(value)])
+  );
+};
+
+// Utility to map spacing values
+const mapSpacing = (spacing: Spacing) => {
+  const spacingArray = Object.values(spacing).map((val) => Number(val));
+  return (factor: number): number => spacingArray[factor - 1] || factor * 8;
+};
+
+// Extend Material-UI theme for custom components
+declare module "@mui/material/styles" {
+  interface Components {
+    MuiChartsAxis?: {
+      styleOverrides?: {
+        root?: Record<string, any>;
+      };
+    };
+    MuiChartsLegend?: {
+      styleOverrides?: {
+        root?: Record<string, any>;
+      };
+    };
+    MuiTreeItem?: {
+      styleOverrides?: {
+        root?: Record<string, any>;
+      };
+    };
+    MuiTimelineDot?: {
+      styleOverrides?: {
+        root?: Record<string, any>;
+      };
+    };
+    MuiTimelineItem?: {
+      styleOverrides?: {
+        root?: Record<string, any>;
+      };
+    };
+    MuiTimeline?: {
+      styleOverrides?: {
+        root?: Record<string, any>;
+      };
+    };
+  }
+}
 const createResponsiveTheme = (isSmallScreen = false) => {
   const size = isSmallScreen ? "sm" : "md";
-  const mapBreakpoints = (breakpoints: any) => {
-    return Object.fromEntries(
-      Object.entries(breakpoints).map(([key, value]) => [
-        key,
-        parseInt(value as string),
-      ])
-    );
-  };
-
-  const mapSpacing = (spacing: any) => {
-    const spacingArray = Object.values(spacing).map((val) =>
-      parseInt(val as string)
-    );
-    return (factor: any) => spacingArray[factor - 1] || factor * 8;
-  };
-
   return createTheme({
     cssVariables: true,
     palette: {
@@ -63,9 +96,13 @@ const createResponsiveTheme = (isSmallScreen = false) => {
       MuiFormHelperText: {
         ...themeJson.components.MuiFormHelperText,
       },
-      MuiTooltip: {
-        ...themeJson.components.MuiTooltip,
-      },
+      MuiPopper: {
+        styleOverrides: {
+          root: {
+            ...(themeJson.components.MuiPopper?.styleOverrides?.root)
+          },
+        },
+      },  
       MuiTableCell: {
         ...themeJson.components.MuiTableCell,
       },
@@ -133,9 +170,6 @@ const createResponsiveTheme = (isSmallScreen = false) => {
       },
       MuiToolbar: {
         ...themeJson.components.MuiToolbar,
-      },
-      MuiAppbar: {
-        ...themeJson.components.MuiAppbar,
       },
       MuiIconButton: {
         ...themeJson.components.MuiIconButton,

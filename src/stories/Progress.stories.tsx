@@ -9,8 +9,8 @@ import withThemeProvider from "./withThemeProvider";
 // Storybook meta information
 export default {
   title: "Components/Progress",
-  component: CircularProgress,
   tags: ["autodocs"],
+  decorators: [withThemeProvider],
   argTypes: {
     variant: {
       control: "select",
@@ -39,8 +39,7 @@ export default {
       description: "The size of the circular progress indicator in pixels.",
     },
   },
-  decorators: [withThemeProvider],
-} as Meta<typeof CircularProgress | typeof LinearProgress>;
+} as Meta;
 
 // Template for the CircularProgress component
 const CircularProgressTemplate: StoryFn<typeof CircularProgress> = (args) => (
@@ -51,6 +50,18 @@ const CircularProgressTemplate: StoryFn<typeof CircularProgress> = (args) => (
 const LinearProgressTemplate: StoryFn<typeof LinearProgress> = (args) => (
   <LinearProgress {...args} />
 );
+
+// Combined story to display both CircularProgress and LinearProgress
+export const CombinedProgress = (args: any) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <CircularProgress {...args} thickness={args.thickness || 3.6} size={args.size || 40} />
+    <LinearProgress {...args} value={args.value || 50} valueBuffer={args.valueBuffer || 60} />
+  </div>
+);
+CombinedProgress.args = {
+  variant: "indeterminate",
+  color: "primary",
+};
 
 // Default story for the CircularProgress component
 export const CircularDefault = CircularProgressTemplate.bind({});

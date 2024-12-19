@@ -4,7 +4,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  IconButton,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import withThemeProvider from "./withThemeProvider";
@@ -15,7 +14,6 @@ import React from "react";
 (AccordionSummary as React.FC).displayName = "AccordionSummary";
 (AccordionDetails as React.FC).displayName = "AccordionDetails";
 (Typography as React.FC).displayName = "Typography";
-(IconButton as React.FunctionComponent<any>).displayName = "IconButton";
 
 // Storybook meta information
 export default {
@@ -35,6 +33,10 @@ export default {
       control: "boolean",
       description: "If true, rounded corners are disabled.",
     },
+    disabled: {
+      control: "boolean",
+      description: "If true, the accordion is disabled.",
+    },
     onChange: {
       action: "changed",
       description: "Triggered when the accordion's expanded state changes.",
@@ -49,9 +51,18 @@ const Template: StoryFn<typeof Accordion> = (args) => (
     expanded={args.expanded}
     disableGutters={args.disableGutters}
     square={args.square}
-    onChange={args.onChange ? (event, newExpanded) => args.onChange(newExpanded) : undefined}
+    disabled={args.disabled}
+    onChange={(event, expanded) => {
+      if (args.onChange) {
+        args.onChange(event, expanded);
+      }
+    }}
   >
-    <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
+    <AccordionSummary
+      expandIcon={<ExpandMoreIcon />}
+      aria-controls="panel1-content"
+      id="panel1-header"
+    >
       <Typography>Accordion Title</Typography>
     </AccordionSummary>
     <AccordionDetails>
@@ -68,18 +79,29 @@ Default.args = {
   expanded: false,
   disableGutters: false,
   square: false,
+  disabled: false,
 };
 
-// Expanded story for the Accordion component
+// Story demonstrating expanded state
 export const Expanded = Template.bind({});
 Expanded.args = {
   expanded: true,
   disableGutters: false,
   square: false,
+  disabled: false,
 };
 
-// Multiple Accordions story
-export const MultipleAccordions = () => {
+// Story demonstrating disabled state
+export const Disabled = Template.bind({});
+Disabled.args = {
+  expanded: false,
+  disableGutters: false,
+  square: false,
+  disabled: true,
+};
+
+// Story demonstrating multiple accordions with style overrides
+export const StyledAccordions = () => {
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -88,28 +110,33 @@ export const MultipleAccordions = () => {
 
   return (
     <div>
+      {/* First Accordion */}
       <Accordion expanded={expanded === "panel1"} onChange={handleChange("panel1")}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
-          <Typography>Panel 1</Typography>
+          <Typography>First Accordion</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Content for Panel 1.</Typography>
+          <Typography>This is the content of the first accordion.</Typography>
         </AccordionDetails>
       </Accordion>
+
+      {/* Middle Accordion */}
       <Accordion expanded={expanded === "panel2"} onChange={handleChange("panel2")}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2-content" id="panel2-header">
-          <Typography>Panel 2</Typography>
+          <Typography>Middle Accordion</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Content for Panel 2.</Typography>
+          <Typography>This is the content of the middle accordion.</Typography>
         </AccordionDetails>
       </Accordion>
+
+      {/* Last Accordion */}
       <Accordion expanded={expanded === "panel3"} onChange={handleChange("panel3")}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3-content" id="panel3-header">
-          <Typography>Panel 3</Typography>
+          <Typography>Last Accordion</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Content for Panel 3.</Typography>
+          <Typography>This is the content of the last accordion.</Typography>
         </AccordionDetails>
       </Accordion>
     </div>

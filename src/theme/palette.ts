@@ -1,12 +1,18 @@
 import themeJson from "./theme.json";
+import { PaletteColorOptions, PaletteOptions } from "@mui/material/styles";
 
-const allColors: any = { ...themeJson["material/colors"] };
+type ColorFamily = Record<string, string>;
+
+type AllColors = Record<string, ColorFamily>;
+
+// Load all colors from theme JSON
+const allColors: AllColors = { ...themeJson["material/colors"] };
 
 // Function to resolve color values in an object if they are strings
-function resolveColors(data: any) {
+function resolveColors(data: Record<string, string | object>): Record<string, string | object> {
   if (typeof data !== "object" || data === null) return data; // Return non-object data as is
 
-  const resolvedData: any = {};
+  const resolvedData: Record<string, string | object> = {};
 
   for (let [key, value] of Object.entries(data)) {
     if (typeof value === "string") {
@@ -14,7 +20,7 @@ function resolveColors(data: any) {
       const match = value.match(/^(.+?)\[(\d+|A\d+)\]$/);
       if (match) {
         const [_, colorFamily, shade] = match;
-
+        
         // Replace color reference with hex code if available
         resolvedData[key] =
           allColors[colorFamily] && allColors[colorFamily][shade]
@@ -30,24 +36,14 @@ function resolveColors(data: any) {
 
   return resolvedData;
 }
-export const palette = {
+
+// Map resolved colors to the palette
+export const palette: PaletteOptions = {
   ...allColors,
-  primary: {
-    ...resolveColors(themeJson.colorSchemes.light.palette.primary),
-  },
-  secondary: {
-    ...resolveColors(themeJson.colorSchemes.light.palette.secondary),
-  },
-  error: {
-    ...resolveColors(themeJson.colorSchemes.light.palette.error),
-  },
-  warning: {
-    ...resolveColors(themeJson.colorSchemes.light.palette.warning),
-  },
-  info: {
-    ...resolveColors(themeJson.colorSchemes.light.palette.info),
-  },
-  success: {
-    ...resolveColors(themeJson.colorSchemes.light.palette.success),
-  },
+  primary: resolveColors(themeJson.colorSchemes.light.palette.primary) as PaletteColorOptions,
+  secondary: resolveColors(themeJson.colorSchemes.light.palette.secondary) as PaletteColorOptions,
+  error: resolveColors(themeJson.colorSchemes.light.palette.error) as PaletteColorOptions,
+  warning: resolveColors(themeJson.colorSchemes.light.palette.warning) as PaletteColorOptions,
+  info: resolveColors(themeJson.colorSchemes.light.palette.info) as PaletteColorOptions,
+  success: resolveColors(themeJson.colorSchemes.light.palette.success) as PaletteColorOptions,
 };

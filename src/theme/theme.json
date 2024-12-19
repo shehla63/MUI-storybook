@@ -13134,13 +13134,15 @@
         }
       }
     },
-    "MuiTooltip": {
+    "MuiPopper": {
       "styleOverrides": {
-        ".MuiTooltip-tooltip": {
-          "padding": "4px 8px",
-          "background": "rgba(97, 97, 97, 0.9)",
-          "borderRadius": "4px",
-          "opacity": 1
+        "root": {
+          "& .MuiTooltip-tooltip": {
+            "padding": "4px 8px",
+            "background": "rgba(97, 97, 97, 0.9)",
+            "borderRadius": "4px",
+            "opacity": 1
+          }
         }
       }
     },
