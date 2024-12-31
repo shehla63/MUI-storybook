@@ -1,10 +1,13 @@
 import { Meta, StoryFn } from "@storybook/react";
-import { Breadcrumbs, Link, Typography, IconButton } from "@mui/material";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import HomeIcon from '@mui/icons-material/Home';
+import { Breadcrumbs, Link, Typography, IconButton, Stack } from "@mui/material";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import HomeIcon from "@mui/icons-material/Home";
 import withThemeProvider from "./withThemeProvider";
+import WhatshotIcon from "@mui/icons-material/Whatshot";
+import GrainIcon from "@mui/icons-material/Grain";
 
-(Breadcrumbs as React.ForwardRefExoticComponent<any>).displayName = "Breadcrumbs";
+(Breadcrumbs as React.ForwardRefExoticComponent<any>).displayName =
+  "Breadcrumbs";
 (Link as React.ForwardRefExoticComponent<any>).displayName = "Link";
 (Typography as React.ForwardRefExoticComponent<any>).displayName = "Typography";
 (IconButton as React.ForwardRefExoticComponent<any>).displayName = "IconButton";
@@ -21,7 +24,8 @@ export default {
     },
     maxItems: {
       control: { type: "number", min: 1, max: 10 },
-      description: "The maximum number of breadcrumbs to display before collapsing.",
+      description:
+        "The maximum number of breadcrumbs to display before collapsing.",
     },
     itemsAfterCollapse: {
       control: { type: "number", min: 0, max: 5 },
@@ -73,20 +77,23 @@ Collapsed.args = {
 
 // Breadcrumbs with Icons Example
 const IconTemplate: StoryFn<typeof Breadcrumbs> = (args) => (
-  <Breadcrumbs {...args}>
-    <Link color="inherit" href="#" aria-label="Home">
-      <IconButton size="small">
-        <HomeIcon />
-      </IconButton>
-      Home
-    </Link>
-    <Link color="inherit" href="#">
-      Category
-    </Link>
-    <Link color="inherit" href="#">
-      Subcategory
-    </Link>
-    <Typography color="text.primary">Item</Typography>
+  <Breadcrumbs aria-label="breadcrumb">
+    <Stack gap={0.5} direction="row" alignItems="center">
+      <HomeIcon fontSize="inherit" />
+      <Link underline="hover" color="text.primary" href="/">
+        <Typography variant="body1">MUI</Typography>
+      </Link>
+    </Stack>
+    <Stack gap={0.5} direction="row" alignItems="center">
+      <WhatshotIcon fontSize="inherit" />
+      <Link underline="hover" color="text.primary" href="/">
+        <Typography variant="body1">Core</Typography>
+      </Link>
+    </Stack>
+    <Stack gap={0.5} direction="row" alignItems="center">
+      <GrainIcon fontSize="inherit" />
+      <Typography color="text.primary">Breadcrumb</Typography>
+    </Stack>
   </Breadcrumbs>
 );
 
